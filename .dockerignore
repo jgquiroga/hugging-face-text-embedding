@@ -1,0 +1,15 @@
+.git
+.cache
+__pycache__
+.mypy_cache
+.pytest_cache
+pip-log.txt
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+*.md
+!README*.md
+*.cover
+*.log
