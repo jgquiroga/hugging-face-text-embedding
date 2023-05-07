@@ -5,6 +5,23 @@ Docker image to expose a basic text embedding API using all-MiniLM-L6-v2 model
 
 https://github.com/jgquiroga/hugging-face-text-embedding
 
+
+# To run locally without docker
+
+## Prerequisites
+
+Install requirements:
+
+```bash
+pip install -r ./requirements.txt
+```
+
+## Run the application using uvicorn
+
+```bash
+uvicorn app.main:app --reload --port 7860 --host 0.0.0.0
+```
+
 # To build the image
 
 ```bash
@@ -55,6 +72,7 @@ curl --location 'http://127.0.0.1:7860/semantic-kernel/sentence-transformers/all
 
 ```csharp
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.HuggingFace.TextEmbedding;
 ```
 
