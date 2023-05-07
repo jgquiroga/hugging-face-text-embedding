@@ -48,3 +48,24 @@ curl --location 'http://127.0.0.1:7860/semantic-kernel/sentence-transformers/all
     "inputs": ["This is a test sentence"]
 }'
 ```
+
+# Usage with Semantic Kernel in dotnet
+
+### usings:
+
+```csharp
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.HuggingFace.TextEmbedding;
+```
+
+```csharp
+var kernelBuilder = Kernel.Builder;
+    . . .
+var volatileMemory = new VolatileMemoryStore();
+kernelBuilder.WithMemoryStorageAndTextEmbeddingGeneration(volatileMemory,
+    new HuggingFaceTextEmbeddingGeneration(
+        new Uri("http://localhost:7860/semantic-kernel"),
+        "sentence-transformers/all-MiniLM-L6-v2"
+        ));
+var kernel = kernelBuilder.Build();
+```
