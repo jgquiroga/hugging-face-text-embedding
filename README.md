@@ -8,6 +8,22 @@ https://github.com/jgquiroga/hugging-face-text-embedding
 
 # To run locally without docker
 
+## For Windows
+
+It is recommended to create a virtual environment.
+
+To create a Virtual Environment:
+
+```bash
+python -m venv c:\path\to\myenv
+```
+
+To activate the Virtual Environment
+
+```bash
+.\.venv\Scripts\Activate.ps1
+```
+
 ## Prerequisites
 
 Install requirements:
@@ -19,24 +35,24 @@ pip install -r ./requirements.txt
 ## Run the application using uvicorn
 
 ```bash
-uvicorn app.main:app --reload --port 7860 --host 0.0.0.0
+uvicorn app.main:app --reload --port 8080 --host 0.0.0.0
 ```
 
 # To build the image
 
 ```bash
-docker build -t jgquiroga/hugging-face-text-embedding:v0.1.0 .
+docker build -t jgquiroga/hugging-face-text-embedding:v0.2.0 .
 ```
 
 # To Push the image
 
 ```bash
-docker push jgquiroga/hugging-face-text-embedding:v0.1.0
+docker push jgquiroga/hugging-face-text-embedding:v0.2.0
 ```
 
 # To run the image
 ```bash
-docker run -d --name hugging-face-text-embedding -p 7860:80 jgquiroga/hugging-face-text-embedding:v0.1.0
+docker run -d --name hugging-face-text-embedding -p 8080:80 jgquiroga/hugging-face-text-embedding:v0.2.0
 ```
 
 # To test the api
@@ -48,42 +64,43 @@ http://localhost:7860/docs
 ## Example Calls
 
 ```
-curl --location 'http://127.0.0.1:7860/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2' \
+curl --location 'http://127.0.0.1:8080/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2' \
 --header 'Accept: application/json' \
 --header 'Content-Type: application/json' \
 --data '{
     "inputs": ["This is a test sentence"]
 }'
 ```
-
-
-```
-curl --location 'http://127.0.0.1:7860/semantic-kernel/sentence-transformers/all-MiniLM-L6-v2' \
---header 'Accept: application/json' \
---header 'Content-Type: application/json' \
---data '{
-    "inputs": ["This is a test sentence"]
-}'
-```
-
 # Usage with Semantic Kernel in dotnet
 
 ### usings:
 
 ```csharp
+using System.Linq;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.Memory;
-using Microsoft.SemanticKernel.Connectors.HuggingFace.TextEmbedding;
+using Microsoft.SemanticKernel.Connectors.HuggingFace.TextGeneration;
 ```
 
 ```csharp
-var kernelBuilder = Kernel.Builder;
-    . . .
-var volatileMemory = new VolatileMemoryStore();
-kernelBuilder.WithMemoryStorageAndTextEmbeddingGeneration(volatileMemory,
-    new HuggingFaceTextEmbeddingGeneration(
-        new Uri("http://localhost:7860/semantic-kernel"),
-        "sentence-transformers/all-MiniLM-L6-v2"
-        ));
+// Memory functionality is experimental
+#pragma warning disable SKEXP0001, SKEXP0010, SKEXP0050
+
+// HuggingFace functionality is experimental
+#pragma warning disable SKEXP0020
+
+var kernelBuilder = Kernel.CreateBuilder();
+
+kernelBuilder.AddHuggingFaceTextEmbeddingGeneration(
+    model: "sentence-transformers/all-MiniLM-L6-v2",
+    endpoint: new Uri("http://localhost:8080")
+);
+
 var kernel = kernelBuilder.Build();
+
+var memoryBuilder = new MemoryBuilder();
+memoryBuilder.WithTextEmbeddingGeneration(kernel.GetRequiredService<ITextEmbeddingGenerationService>());
+memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
+var memory = memoryBuilder.Build();
 ```

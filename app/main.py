@@ -52,7 +52,7 @@ class SKResponse(BaseModel):
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 @app.post("/pipeline/feature-extraction/sentence-transformers/all-MiniLM-L6-v2")
-async def generateEmbeddings(inputs: Inputs) -> list[list[float]]:
+async def generateEmbeddings(inputs: Inputs) -> list[list[list[list[float]]]]:
     '''
     Generates a list of embeddings using the model: sentence-transformers/all-MiniLM-L6-v2
     This model returns vectors of 384 dimensions
@@ -61,37 +61,15 @@ async def generateEmbeddings(inputs: Inputs) -> list[list[float]]:
         log.debug("Receiving input sentences")
         embeddings = model.encode(inputs.inputs)
         result = []
+        rows = []
+        result.append(rows)
         for output in embeddings:
+            row = []
             vector = []
             for embedding in output:
                 vector.append(embedding)
-            result.append(vector)
-
-        log.debug("Returning embedding vectors")
-        return result
-    except Exception as e:
-        log.error(e)
-        raise HTTPException(status_code=500, detail="An error has ocurred")
-        
-@app.post("/semantic-kernel/sentence-transformers/all-MiniLM-L6-v2")
-async def generateEmbeddingsSK(inputs: Inputs) -> SKResponse:
-    '''
-    Generates a list of embeddings for Semantic Kernetl using the model: sentence-transformers/all-MiniLM-L6-v2
-    This model returns vectors of 384 dimensions
-    '''
-    try:
-        log.debug("Receiving input sentences")
-        embeddings = model.encode(inputs.inputs)
-        result = {
-            "data": []
-        }
-        for output in embeddings:
-            vector = []
-            for embedding in output:
-                vector.append(embedding)
-            result["data"].append({
-                "embedding": vector
-            })
+            row.append(vector)
+            rows.append(row)
 
         log.debug("Returning embedding vectors")
         return result
@@ -100,4 +78,4 @@ async def generateEmbeddingsSK(inputs: Inputs) -> SKResponse:
         raise HTTPException(status_code=500, detail="An error has ocurred")
 
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", reload=True, port=7860, host="0.0.0.0")
+    uvicorn.run("app.main:app", reload=True, port=8080, host="0.0.0.0")
