@@ -41,18 +41,18 @@ uvicorn app.main:app --reload --port 8080 --host 0.0.0.0
 # To build the image
 
 ```bash
-docker build -t jgquiroga/hugging-face-text-embedding:v0.2.0 .
+docker build -t jgquiroga/hugging-face-text-embedding:v0.3.0 .
 ```
 
 # To Push the image
 
 ```bash
-docker push jgquiroga/hugging-face-text-embedding:v0.2.0
+docker push jgquiroga/hugging-face-text-embedding:v0.3.0
 ```
 
 # To run the image
 ```bash
-docker run -d --name hugging-face-text-embedding -p 8080:80 jgquiroga/hugging-face-text-embedding:v0.2.0
+docker run --rm --name hugging-face-text-embedding -p 8080:80 jgquiroga/hugging-face-text-embedding:v0.3.0
 ```
 
 # To test the api
@@ -88,13 +88,13 @@ using Microsoft.SemanticKernel.Connectors.HuggingFace.TextGeneration;
 #pragma warning disable SKEXP0001, SKEXP0010, SKEXP0050
 
 // HuggingFace functionality is experimental
-#pragma warning disable SKEXP0020
+#pragma warning disable SKEXP0020, SKEXP0070
 
 var kernelBuilder = Kernel.CreateBuilder();
 
 kernelBuilder.AddHuggingFaceTextEmbeddingGeneration(
     model: "sentence-transformers/all-MiniLM-L6-v2",
-    endpoint: new Uri("http://localhost:8080")
+    endpoint: new Uri("http://127.0.0.1:8080")
 );
 
 var kernel = kernelBuilder.Build();
