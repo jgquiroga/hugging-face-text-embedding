@@ -80,7 +80,7 @@ using System.Linq;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Embeddings;
 using Microsoft.SemanticKernel.Memory;
-using Microsoft.SemanticKernel.Connectors.HuggingFace.TextGeneration;
+using Microsoft.SemanticKernel.Connectors.HuggingFace;
 ```
 
 ```csharp
