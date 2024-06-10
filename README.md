@@ -104,3 +104,45 @@ memoryBuilder.WithTextEmbeddingGeneration(kernel.GetRequiredService<ITextEmbeddi
 memoryBuilder.WithMemoryStore(new VolatileMemoryStore());
 var memory = memoryBuilder.Build();
 ```
+
+### Adding memories to a collection
+
+```csharp
+const string MemoryCollectionName = "aboutMe";
+
+await memory.SaveInformationAsync(MemoryCollectionName, id: "info1", text: "My name is Andrea");
+await memory.SaveInformationAsync(MemoryCollectionName, id: "info2", text: "I currently work as a tourist operator");
+await memory.SaveInformationAsync(MemoryCollectionName, id: "info3", text: "I currently live in Seattle and have been living there since 2005");
+await memory.SaveInformationAsync(MemoryCollectionName, id: "info4", text: "I visited France and Italy five times since 2015");
+await memory.SaveInformationAsync(MemoryCollectionName, id: "info5", text: "My family is from New York");
+
+```
+
+### Searching the memory
+
+```csharp
+var questions = new[]
+{
+    "what is my name?",
+    "where do I live?",
+    "I live in",
+    "where is my family from?",
+    "where have I travelled?",
+    "what do I do for work?",
+};
+
+foreach (var q in questions)
+{
+    
+    var response = await memory.SearchAsync(MemoryCollectionName, q, minRelevanceScore: 0.5).FirstOrDefaultAsync();
+
+    if (response == null)
+    {
+        Console.WriteLine(q + " " + "Not found");
+    }
+    else
+    {
+        Console.WriteLine(q + " " + response?.Metadata.Text);
+    }
+}
+```
