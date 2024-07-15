@@ -1,6 +1,6 @@
 # For Hugging face
-sentence-transformers==2.6.1
+sentence-transformers==3.0.1
 
 # For publish as an api
-fastapi==0.110.1
-uvicorn[standard]==0.29.0
+fastapi==0.111.1
+uvicorn[standard]==0.30.1

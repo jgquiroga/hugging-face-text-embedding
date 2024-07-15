@@ -41,18 +41,18 @@ uvicorn app.main:app --reload --port 8080 --host 0.0.0.0
 # To build the image
 
 ```bash
-docker build -t jgquiroga/hugging-face-text-embedding:v0.3.0 .
+docker build -t jgquiroga/hugging-face-text-embedding:v0.4.0 .
 ```
 
 # To Push the image
 
 ```bash
-docker push jgquiroga/hugging-face-text-embedding:v0.3.0
+docker push jgquiroga/hugging-face-text-embedding:v0.4.0
 ```
 
 # To run the image
 ```bash
-docker run --rm --name hugging-face-text-embedding -p 8080:80 jgquiroga/hugging-face-text-embedding:v0.3.0
+docker run --rm --name hugging-face-text-embedding -p 8080:80 jgquiroga/hugging-face-text-embedding:v0.4.0
 ```
 
 # To test the api
